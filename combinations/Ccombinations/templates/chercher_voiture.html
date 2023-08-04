@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Chercher une voiture</title>
+  </head>
+  <body>
+    <h1>Chercher une voiture</h1>
+    <form method="post">
+      {% csrf_token %}
+      <label for="nom">Nom de la voiture :</label>
+      <input type="text" id="nom" name="nom" >
+      <input type="text" id="hex_code" name="hex_code" >
+      <button type="submit">Chercher</button>
+    </form>
+
+
+    
+    {% if voiture %}
+    
+    <h2>Résultats de la recherche :</h2>
+    <p>Nom : {{ voiture.nom }}</p>
+    <p>Année de fabrication : {{ voiture.annee_fabrication }}</p>
+    <p>Marque : {{ voiture.marque.nom }}</p>
+    <div style= "background-color:  {{  voiture.code.hex_code  }} ;">couleur : {{ voiture.code.name }}</div>
+    <p>Composition </p>
+    <ul>
+      
+
+      <table style="width: 250px; height: 250px;">
+        <tr>
+            <th>couleur</th>
+            <th>quantité</th>
+
+        </tr>
+        <tr>
+            <td style="background-color:  {{  formule_peinture.base_teint1   }} "></td>
+            <td>{{ formule_peinture.quantite_base_teint1 }} g</td>
+        </tr>
+        <tr>
+        {% if formule_peinture.base_teint2 %}
+          <td  style="background-color:{{ formule_peinture.base_teint2 }}">:</td>
+          <td> {{ formule_peinture.quantite_base_teint2 }} g</td>
+        {% endif %}
+        {% if formule_peinture.base_teint3 %}
+          <td>{{ formule_peinture.base_teint3 }}: {{ formule_peinture.quantite_base_teint3 }}</td>
+        {% endif %}
+
+        </ul>
+        </tr>
+      </table>
+
+    {% endif %}
+     <ul>
+      {% if couleur %}
+    
+    <h2>Résultats de la recherche :</h2>
+    <p>Nom : {{ couleur.name }}</p>
+   </ul>
+   {% if formule_peinture1 %}
+   <h2>Formules de peinture :</h2>
+   <ul>
+       {% for formule_peinture in formule_peinture1 %}
+           <li>Base teint 1: {{ formule_peinture.base_teint1 }} ({{ formule_peinture.quantite_base_teint1 }})</li>
+           {% if formule_peinture.base_teint2 %}
+               <li>Base teint 2: {{ formule_peinture.base_teint2 }} ({{ formule_peinture.quantite_base_teint2 }})</li>
+           {% endif %}
+           {% if formule_peinture.base_teint3 %}
+               <li>Base teint 3: {{ formule_peinture.base_teint3 }} ({{ formule_peinture.quantite_base_teint3 }})</li>
+           {% endif %}
+       {% endfor %}
+   </ul>
+   {% endif %}
+
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

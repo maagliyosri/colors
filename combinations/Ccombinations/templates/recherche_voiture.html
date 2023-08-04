@@ -1,0 +1,131 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Rechercher une voiture</title>
+      <!-- Add Bootstrap CSS -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    </head>
+    <body>
+    
+    <div class="container">
+      <h1>Chercher une couleur</h1>
+      <form method="post" action="{% url 'recherche_voiture' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="marque">Marque voiture :</label>
+            <input type="text" class="form-control" id="nom" name="nom">
+          </div>
+        <div class="form-group">
+          <label for="nom">Nom de la voiture :</label>
+          <input type="text" class="form-control" id="nom" name="nom">
+        </div>
+        <div class="form-group">
+          <label for="hex_code">Code couleur :</label>
+          <input type="text" class="form-control" id="hex_code" name="hex_code">
+        </div>
+       
+        <button type="submit" class="btn btn-primary">Chercher</button>
+      </form>
+    
+      <!-- Results -->
+      {% if couleur_cherchee %}
+        <h2>Résultats de la recherche :</h2>
+        <div class="card" style="margin-bottom: 50px;">
+            {{ couleur_cherchee.name }} 
+            <div style="background-color: {{ couleur_cherchee.hex_code }} ; width: 100px; height: 50px;">
+              </div> 
+
+        </div>
+
+       
+        <table class="table table-bordered">
+            <thead>
+                <th>Base de teint</th>
+                <th>Quantité en grammes</th>
+            </thead>
+            <tbody>
+                <tr>
+              {% for formule_peinture in couleur_cherchee.formulepeinture_set.all %}
+                 <td style="background-color : {{ formule_peinture.base_teint1 }}; width:250px"></td>
+                 <td>{{ formule_peinture.quantite_base_teint1 }} g</td>
+                 <tr>
+                    {% if formule_peinture.base_teint2 %}
+                    <td style="background-color : {{ formule_peinture.base_teint2 }}; width:250px"></td>
+                    <td>{{ formule_peinture.quantite_base_teint2 }} g</td>
+                    {% endif %}
+                 </tr>
+                 <tr>
+                {% if formule_peinture.base_teint3 %}
+                  <td>{{ formule_peinture.base_teint3 }} ({{ formule_peinture.quantite_base_teint3 }})</td>
+                {% endif %}
+                 </tr>  
+                </tr>
+               {% endfor %} 
+            </tbody>
+        </table>
+
+
+
+
+
+        {% elif voitures %}
+        <h2>Résultats de la recherche :</h2>
+        <ul>
+          {% for voiture in voitures %}
+            <li>
+              <div class="card" style="height: 40px;">Nom de voiture: {{ voiture.nom }}</div>
+              <div class="card" style="height: 40px;">Année de fabrication : {{ voiture.annee_fabrication }}</div>
+              <div class="card" style="height: 40px;">Marque : {{ voiture.marque.nom }}</div>
+              <div style="height: 40px;">Couleurs de la voiture:</div>
+              <ul>
+                {% for couleur in voiture.code.all %}
+                  <div class="card" style="margin-bottom: 50px;">
+                    {{ couleur.name }} 
+                    <div style="background-color: {{ couleur.hex_code }} ; width: 100px; height: 50px;">
+                      </div> 
+        
+                </div>
+                <div class="card">Formule de Couleur</div>
+                  <table class="table table-bordered">
+                    <thead>
+                        <th>Base de teint</th>
+                        <th>Quantité en grammes</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                      {% for formule_peinture in couleur.formulepeinture_set.all %}
+                         <td style="background-color : {{ formule_peinture.base_teint1 }}; width:250px"></td>
+                         <td>{{ formule_peinture.quantite_base_teint1 }} g</td>
+                         <tr>
+                            {% if formule_peinture.base_teint2 %}
+                            <td style="background-color : {{ formule_peinture.base_teint2 }}; width:250px"></td>
+                            <td>{{ formule_peinture.quantite_base_teint2 }} g</td>
+                            {% endif %}
+                         </tr>
+                         <tr>
+                        {% if formule_peinture.base_teint3 %}
+                          <td>{{ formule_peinture.base_teint3 }} ({{ formule_peinture.quantite_base_teint3 }})</td>
+                        {% endif %}
+                         </tr>  
+                        </tr>
+                       {% endfor %} 
+                    </tbody>
+                </table>
+
+                  
+                {% endfor %}
+              </ul>
+            </li>
+          {% empty %}
+            <p>Pas de couleur correspondante.</p>
+          {% endfor %}
+        </ul>
+      {% else %}
+      {% endif %}
+
+</div>
+<!-- Add Bootstrap JS (optional) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>
